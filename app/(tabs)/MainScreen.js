@@ -1,7 +1,19 @@
-import React from "react";
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  Button,
+  Alert,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useTheme } from "../../theme"; // Import global theme
+import { setupDatabase, getRandomShloka } from "../database";
+import { useTheme } from "../../theme";
+import * as Notifications from "expo-notifications";
+import * as Device from "expo-device";
 
 const chapters = [
   { id: "A", title: "Transliteration and Pronunciation Guide" },
@@ -30,36 +42,83 @@ const chapters = [
 
 const MainScreen = () => {
   const navigation = useNavigation();
-  const theme = useTheme(); // Get the current theme styles
+  const theme = useTheme();
+  const [randomShloka, setRandomShloka] = useState(null);
+
+  useEffect(() => {
+    setupDatabase().then(() => {
+      getRandomShloka((shloka) => setRandomShloka(shloka[0]));
+    });
+  }, []);
+
+  // ✅ Request Notification Permission for iOS
+  const requestNotificationPermission = async () => {
+    if (!Device.isDevice) {
+      Alert.alert("Error", "Notifications only work on a physical iPhone.");
+      return;
+    }
+
+    const { status } = await Notifications.requestPermissionsAsync();
+
+    if (status !== "granted") {
+      Alert.alert("Permission Required", "Please enable notifications to receive daily shlokas.");
+      return;
+    }
+
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: "📜 Daily Bhagavad Gita",
+        body: "Your daily Shloka is ready! Open the app to read it.",
+      },
+      trigger: { hour: 8, minute: 0, repeats: true }, // Sends at 8 AM daily
+    });
+
+    Alert.alert("✅ Notifications Enabled", "You will receive a daily Shloka every morning!");
+  };
 
   return (
-    <ScrollView style={[styles.container, theme.background]}>
-      {/* Header Section */}
-      <View style={[styles.header, theme.card]}>
-        <Text style={[styles.title, theme.text]}>Daily Gita</Text>
-        <Text style={[styles.message, theme.text]}>
-          May you enjoy peace, comfort, and happiness by the grace of Sri Krishna Paramatma
-        </Text>
-      </View>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView style={[styles.container, theme.background]}>
+        {/* Header Section */}
+        <View style={[styles.header, theme.card]}>
+          <Text style={[styles.title, theme.text]}>Daily Bhagavad Gita</Text>
 
-      {/* Table of Contents Section */}
-      <View style={styles.tableOfContents}>
-        <Text style={[styles.sectionTitle, theme.text]}>Table of Contents</Text>
-        {chapters.map((chapter) => (
-          <TouchableOpacity key={chapter.id} onPress={() => navigation.navigate(`chapter-${chapter.id}`)}>
-            <Text style={[styles.chapter, theme.text]}>{chapter.title}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </ScrollView>
+          {/* Daily Shloka Section */}
+          {randomShloka && (
+            <View style={[styles.shlokaContainer, theme.card]}>
+              <Text style={[styles.verse, theme.text]}>{randomShloka.shloka}</Text>
+              <Text style={[styles.translation, theme.text]}>{randomShloka.shloka_meaning}</Text>
+            </View>
+          )}
+
+          {/* ✅ Get Daily Shloka Button */}
+          <Button title="Get a Daily Shloka" onPress={requestNotificationPermission} />
+        </View>
+
+        {/* Table of Contents Section */}
+        <View style={styles.tableOfContents}>
+          <Text style={[styles.sectionTitle, theme.text]}>Table of Contents</Text>
+          {chapters.map((chapter) => (
+            <TouchableOpacity key={chapter.id} onPress={() => navigation.navigate(`chapter-${chapter.id}`)}>
+              <Text style={[styles.chapter, theme.text]}>{chapter.title}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#000", // Ensure it blends well with dark mode
+  },
   container: {
     flex: 1,
   },
   header: {
+    paddingTop: 50, // ✅ Moves title below the notch
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
@@ -70,10 +129,24 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
   },
-  message: {
+  shlokaContainer: {
+    marginTop: 15,
+    padding: 15,
+    borderRadius: 10,
+    shadowColor: "black",
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    alignItems: "center",
+  },
+  verse: {
     fontSize: 18,
+    fontWeight: "bold",
     textAlign: "center",
-    paddingHorizontal: 10,
+  },
+  translation: {
+    fontSize: 16,
+    marginTop: 5,
+    textAlign: "center",
   },
   tableOfContents: {
     padding: 20,
@@ -89,5 +162,5 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
 });
- 
+
 export default MainScreen;

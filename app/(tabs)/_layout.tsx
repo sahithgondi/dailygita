@@ -1,16 +1,22 @@
 import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { ThemeProvider } from "../../theme"; 
 import { useColorScheme } from "react-native";
-import { ThemeProvider } from "../../theme"; // Import global theme provider
-import { Tabs } from "expo-router";
+import MainScreen from "./MainScreen";
+
+const Stack = createStackNavigator();
 
 export default function Layout() {
-  const theme = useColorScheme(); // Detects system theme
+  const theme = useColorScheme();
 
   return (
-    <ThemeProvider theme={theme}>
-      <Tabs>
-        <Tabs.Screen name="index" options={{ title: "Daily Bhagavad Gita" }} />
-      </Tabs>
-    </ThemeProvider>
+    <NavigationContainer>
+      <ThemeProvider theme={theme}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="MainScreen" component={MainScreen} />
+        </Stack.Navigator>
+      </ThemeProvider>
+    </NavigationContainer>
   );
 }

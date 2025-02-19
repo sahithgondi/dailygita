@@ -1,47 +1,58 @@
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("gita.db");
+// ✅ Correctly open the database using openDatabaseAsync
+let db;
 
-// Initialize Database
-export const setupDatabase = () => {
+const initializeDatabase = async () => {
+  try {
+    db = await SQLite.openDatabaseAsync("gita.db");
+    console.log("✅ Database initialized successfully");
+  } catch (error) {
+    console.error("❌ Error initializing database:", error);
+  }
+};
+
+// ✅ Ensure the database is set up before running transactions
+export const setupDatabase = async () => {
+  if (!db) {
+    console.error("❌ Database not initialized yet.");
+    return;
+  }
+
   db.transaction((tx) => {
     tx.executeSql(
       `CREATE TABLE IF NOT EXISTS shlokas (
         chapter_id TEXT,
-        id INTEGER,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         shloka TEXT,
         shloka_meaning TEXT,
         noti_id TEXT
       );`,
       [],
-      () => console.log("✅ Database initialized"),
-      (_, error) => console.log("❌ Error initializing database", error)
+      () => console.log("✅ Table created successfully"),
+      (_, error) => console.log("❌ Error creating table:", error)
     );
   });
 };
 
-// Insert Sample Data (Call this once to populate the database)
-export const insertShloka = (chapter_id, id, shloka, shloka_meaning, noti_id) => {
-  db.transaction((tx) => {
-    tx.executeSql(
-      `INSERT INTO shlokas (chapter_id, id, shloka, shloka_meaning, noti_id) VALUES (?, ?, ?, ?, ?);`,
-      [chapter_id, id, shloka, shloka_meaning, noti_id],
-      () => console.log("✅ Shloka inserted"),
-      (_, error) => console.log("❌ Error inserting shloka", error)
-    );
-  });
-};
-
-// Fetch a Random Daily Notification Shloka
+// ✅ Function to get a random shloka
 export const getRandomShloka = (callback) => {
+  if (!db) {
+    console.error("❌ Database is not initialized.");
+    return;
+  }
+
   db.transaction((tx) => {
     tx.executeSql(
       `SELECT * FROM shlokas ORDER BY RANDOM() LIMIT 1;`,
       [],
       (_, { rows }) => callback(rows._array),
-      (_, error) => console.log("❌ Error fetching random shloka", error)
+      (_, error) => console.log("❌ Error fetching shloka:", error)
     );
   });
 };
+
+// ✅ Initialize the database on import
+initializeDatabase();
 
 export default db;
