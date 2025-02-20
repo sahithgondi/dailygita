@@ -6,24 +6,22 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
-  Button,
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { setupDatabase, getRandomShloka } from "../database";
-import { useTheme } from "../../theme";
+import { useTheme } from "../../theme"; // Adjust path if needed
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 
 const chapters = [
-  { id: "A", title: "Transliteration and Pronunciation Guide" },
   { id: "B", title: "Gītā Dhyāna Ślokāḥ" },
   { id: "1", title: "Arjuna Viṣāda Yogaḥ" },
   { id: "2", title: "Sāṅkhya Yogaḥ" },
   { id: "3", title: "Karma Yogaḥ" },
   { id: "4", title: "Jñāna Yogaḥ" },
   { id: "5", title: "Karma Sanyāsa Yogaḥ" },
-  { id: "6", title: "Ātma Saṁyama Yogaḥ (Dhyāna Yogaḥ)" },
+  { id: "6", title: "Ātma Saṁyama Yogaḥ" },
   { id: "7", title: "Jñāna Vijñāna Yogaḥ" },
   { id: "8", title: "Akṣara Parabrahma Yogaḥ" },
   { id: "9", title: "Rājavidyā Rājaguhya Yogaḥ" },
@@ -42,7 +40,7 @@ const chapters = [
 
 const MainScreen = () => {
   const navigation = useNavigation();
-  const theme = useTheme();
+  const themeStyles = useTheme(); // returns darkTheme or lightTheme
   const [randomShloka, setRandomShloka] = useState(null);
 
   useEffect(() => {
@@ -51,115 +49,172 @@ const MainScreen = () => {
     });
   }, []);
 
-  // ✅ Request Notification Permission for iOS
   const requestNotificationPermission = async () => {
     if (!Device.isDevice) {
       Alert.alert("Error", "Notifications only work on a physical iPhone.");
       return;
     }
-
     const { status } = await Notifications.requestPermissionsAsync();
-
     if (status !== "granted") {
-      Alert.alert("Permission Required", "Please enable notifications to receive daily shlokas.");
+      Alert.alert(
+        "Permission Required",
+        "Please enable notifications to receive daily shlokas."
+      );
       return;
     }
-
     Notifications.scheduleNotificationAsync({
       content: {
         title: "📜 Daily Bhagavad Gita",
         body: "Your daily Shloka is ready! Open the app to read it.",
       },
-      trigger: { hour: 8, minute: 0, repeats: true }, // Sends at 8 AM daily
+      trigger: { hour: 8, minute: 0, repeats: true },
     });
-
-    Alert.alert("✅ Notifications Enabled", "You will receive a daily Shloka every morning!");
+    Alert.alert(
+      "✅ Notifications Enabled",
+      "You will receive a daily Shloka every morning!"
+    );
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={[styles.container, theme.background]}>
-        {/* Header Section */}
-        <View style={[styles.header, theme.card]}>
-          <Text style={[styles.title, theme.text]}>Daily Bhagavad Gita</Text>
-
-          {/* Daily Shloka Section */}
-          {randomShloka && (
-            <View style={[styles.shlokaContainer, theme.card]}>
-              <Text style={[styles.verse, theme.text]}>{randomShloka.shloka}</Text>
-              <Text style={[styles.translation, theme.text]}>{randomShloka.shloka_meaning}</Text>
-            </View>
-          )}
-
-          {/* ✅ Get Daily Shloka Button */}
-          <Button title="Get a Daily Shloka" onPress={requestNotificationPermission} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
+      <ScrollView contentContainerStyle={localStyles.container}>
+        {/* Top Section */}
+        <View style={localStyles.topSection}>
+          <Text style={[localStyles.title, themeStyles.text]}>
+            Daily Bhagavad Gita
+          </Text>
         </View>
 
-        {/* Table of Contents Section */}
-        <View style={styles.tableOfContents}>
-          <Text style={[styles.sectionTitle, theme.text]}>Table of Contents</Text>
-          {chapters.map((chapter) => (
-            <TouchableOpacity key={chapter.id} onPress={() => navigation.navigate(`chapter-${chapter.id}`)}>
-              <Text style={[styles.chapter, theme.text]}>{chapter.title}</Text>
-            </TouchableOpacity>
-          ))}
+        {/* Middle Section */}
+        <View style={localStyles.middleSection}>
+          <View style={localStyles.spacer} />
+          {randomShloka && (
+            <View style={localStyles.shlokaContainer}>
+              <Text style={[localStyles.verse, themeStyles.text]}>
+                {randomShloka.shloka}
+              </Text>
+              <Text style={[localStyles.translation, themeStyles.text]}>
+                {randomShloka.shloka_meaning}
+              </Text>
+            </View>
+          )}
+          <TouchableOpacity
+            style={[localStyles.button, localStyles.specialButton]}
+            onPress={requestNotificationPermission}
+          >
+            <Text style={localStyles.buttonText}>Get a Daily Shloka</Text>
+          </TouchableOpacity>
+          <View style={localStyles.spacer} />
+        </View>
+
+        {/* Bottom Section */}
+        <View style={localStyles.bottomSection}>
+          <View style={localStyles.tableOfContents}>
+            <Text style={[localStyles.sectionTitle, themeStyles.text]}>
+              Table of Contents
+            </Text>
+            {chapters.map((chapter) => (
+              <TouchableOpacity
+                key={chapter.id}
+                onPress={() => navigation.navigate(`chapter-${chapter.id}`)}
+              >
+                <Text style={[localStyles.chapter, themeStyles.text]}>
+                  {chapter.title}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          {/* Hyperlink-style Transliteration Guide */}
+          <TouchableOpacity
+            onPress={() => navigation.navigate("translation-guide")}
+          >
+            <Text style={localStyles.link}>Transliteration Guide</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#000", // Ensure it blends well with dark mode
-  },
+const localStyles = StyleSheet.create({
   container: {
+    flexGrow: 1,
+    backgroundColor: "#000",
+    justifyContent: "space-between",
+    paddingVertical: 20,
+  },
+  topSection: {
+    alignItems: "center",
+    marginTop: 40, // Pushes the title lower from the top
+  },
+  middleSection: {
+    alignItems: "center",
     flex: 1,
   },
-  header: {
-    paddingTop: 50, // ✅ Moves title below the notch
-    padding: 20,
-    justifyContent: "center",
+  spacer: {
+    height: 70, // Adjust this value for a bigger space above and below the button
+  },
+  bottomSection: {
     alignItems: "center",
+    paddingBottom: 20,
   },
   title: {
-    fontSize: 28,
+    fontSize: 36, // Title size remains
     fontWeight: "bold",
-    marginBottom: 10,
     textAlign: "center",
   },
   shlokaContainer: {
-    marginTop: 15,
-    padding: 15,
-    borderRadius: 10,
-    shadowColor: "black",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    alignItems: "center",
+    marginVertical: 20,
+    paddingHorizontal: 16,
   },
   verse: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 8,
     textAlign: "center",
   },
   translation: {
-    fontSize: 16,
-    marginTop: 5,
+    fontSize: 14,
+    fontStyle: "italic",
     textAlign: "center",
   },
   tableOfContents: {
-    padding: 20,
+    alignItems: "center",
+    marginVertical: 20,
   },
   sectionTitle: {
-    fontSize: 22,
+    fontSize: 30,
     fontWeight: "bold",
-    marginBottom: 10,
+    textAlign: "center",
+    marginBottom: 18,
   },
   chapter: {
     fontSize: 18,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
+    fontWeight: "bold",
+    marginVertical: 4,
+    textAlign: "center",
+  },
+  button: {
+    padding: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    width: 220,
+    marginVertical: 10,
+  },
+  specialButton: {
+    backgroundColor: "#DA70D6",
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  link: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#DA70D6",
+    marginVertical: 10,
+    textDecorationLine: "none",
   },
 });
 

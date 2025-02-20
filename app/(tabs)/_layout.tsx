@@ -1,22 +1,26 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { ThemeProvider } from "../../theme"; 
-import { useColorScheme } from "react-native";
 import MainScreen from "./MainScreen";
+import TranslationGuideScreen from "../translation-guide";
+
+// 1) Import your ThemeProvider (adjust the path as needed).
+import { ThemeProvider } from "../../theme"; 
 
 const Stack = createStackNavigator();
 
 export default function Layout() {
-  const theme = useColorScheme();
-
   return (
-    <NavigationContainer>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme="dark">
+      <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="MainScreen" component={MainScreen} />
+          <Stack.Screen
+            name="translation-guide"
+            component={TranslationGuideScreen}
+          />
         </Stack.Navigator>
-      </ThemeProvider>
-    </NavigationContainer>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
