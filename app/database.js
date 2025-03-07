@@ -131,7 +131,9 @@ export const shlokas = [
     starred: false,
     note: "",
   },
-  
+  {
+
+  }
   
 ];
 
@@ -142,6 +144,7 @@ export const setupDatabase = () => {
       `CREATE TABLE IF NOT EXISTS shlokas (
         chapter_id TEXT,
         id INTEGER,
+        uvaca TEXT,
         shloka TEXT,
         shloka_meaning TEXT,
         noti_id TEXT,
@@ -162,8 +165,8 @@ export const setupDatabase = () => {
         console.log("📥 Inserting shlokas into database...");
         shlokas.forEach(({ chapter_id, id, shloka, shloka_meaning, noti_id }) => {
           tx.executeSql(
-            "INSERT INTO shlokas (chapter_id, id, shloka, shloka_meaning, noti_id, starred, note) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            [chapter_id, id, shloka, shloka_meaning, noti_id, 0, ""]
+            "INSERT INTO shlokas (chapter_id, id, uvaca, shloka, shloka_meaning, noti_id, starred, note) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [chapter_id, id, uvaca || null , shloka, shloka_meaning || null, noti_id || null, 0, ""]
           );
         });
         console.log("✅ Shlokas inserted successfully!");
