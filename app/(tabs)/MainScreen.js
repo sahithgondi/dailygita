@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { setupDatabase, getRandomShloka } from "../database";
-import { useTheme } from "../../theme"; // Adjust path if needed
+import { useTheme } from "../../theme";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 
@@ -40,7 +40,7 @@ const chapters = [
 
 const MainScreen = () => {
   const navigation = useNavigation();
-  const themeStyles = useTheme(); // returns darkTheme or lightTheme
+  const themeStyles = useTheme(); // Apply dark or light mode
   const [randomShloka, setRandomShloka] = useState(null);
 
   useEffect(() => {
@@ -54,21 +54,27 @@ const MainScreen = () => {
       Alert.alert("Error", "Notifications only work on a physical iPhone.");
       return;
     }
-    const { status } = await Notifications.requestPermissionsAsync();
+
+    const { status } = await Notifications.getPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert(
-        "Permission Required",
-        "Please enable notifications to receive daily shlokas."
-      );
-      return;
+      const { status: newStatus } = await Notifications.requestPermissionsAsync();
+      if (newStatus !== "granted") {
+        Alert.alert(
+          "Permission Required",
+          "Please enable notifications to receive daily shlokas."
+        );
+        return;
+      }
     }
-    Notifications.scheduleNotificationAsync({
+
+    await Notifications.scheduleNotificationAsync({
       content: {
         title: "📜 Daily Bhagavad Gita",
         body: "Your daily Shloka is ready! Open the app to read it.",
       },
       trigger: { hour: 8, minute: 0, repeats: true },
     });
+
     Alert.alert(
       "✅ Notifications Enabled",
       "You will receive a daily Shloka every morning!"
@@ -76,59 +82,53 @@ const MainScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
-      <ScrollView contentContainerStyle={localStyles.container}>
+    <SafeAreaView style={[styles.container, themeStyles.background]}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* Top Section */}
-        <View style={localStyles.topSection}>
-          <Text style={[localStyles.title, themeStyles.text]}>
-            Daily Bhagavad Gita
-          </Text>
+        <View style={styles.topSection}>
+          <Text style={[styles.title, themeStyles.text]}>Daily Bhagavad Gita</Text>
         </View>
 
         {/* Middle Section */}
-        <View style={localStyles.middleSection}>
-          <View style={localStyles.spacer} />
+        <View style={styles.middleSection}>
+          <View style={styles.spacer} />
           {randomShloka && (
-            <View style={localStyles.shlokaContainer}>
-              <Text style={[localStyles.verse, themeStyles.text]}>
+            <View style={styles.shlokaContainer}>
+              <Text style={[styles.verse, themeStyles.text]}>
                 {randomShloka.shloka}
               </Text>
-              <Text style={[localStyles.translation, themeStyles.text]}>
+              <Text style={[styles.translation, themeStyles.text]}>
                 {randomShloka.shloka_meaning}
               </Text>
             </View>
           )}
           <TouchableOpacity
-            style={[localStyles.button, localStyles.specialButton]}
+            style={[styles.button, styles.specialButton]}
             onPress={requestNotificationPermission}
           >
-            <Text style={localStyles.buttonText}>Get a Daily Shloka</Text>
+            <Text style={styles.buttonText}>Get a Daily Shloka</Text>
           </TouchableOpacity>
-          <View style={localStyles.spacer} />
+          <View style={styles.spacer} />
         </View>
 
         {/* Bottom Section */}
-        <View style={localStyles.bottomSection}>
-          <View style={localStyles.tableOfContents}>
-            <Text style={[localStyles.sectionTitle, themeStyles.text]}>
-              Table of Contents
-            </Text>
+        <View style={styles.bottomSection}>
+          <View style={styles.tableOfContents}>
+            <Text style={[styles.sectionTitle, themeStyles.text]}>Table of Contents</Text>
             {chapters.map((chapter) => (
-              <TouchableOpacity
-                key={chapter.id}
-                onPress={() => navigation.navigate(`chapter-${chapter.id}`)}
-              >
-                <Text style={[localStyles.chapter, themeStyles.text]}>
-                  {chapter.title}
-                </Text>
-              </TouchableOpacity>
+            <TouchableOpacity
+              key={chapter.id}
+              onPress={() => navigation.navigate(chapter.id === "B" ? "GitaDhyana" : `chapter-${chapter.id}`)}
+            >
+              <Text style={[styles.chapter, themeStyles.text]}>{chapter.title}</Text>
+            </TouchableOpacity>
             ))}
           </View>
           {/* Hyperlink-style Transliteration Guide */}
           <TouchableOpacity
             onPress={() => navigation.navigate("translation-guide")}
           >
-            <Text style={localStyles.link}>Transliteration Guide</Text>
+            <Text style={styles.link}>Transliteration Guide</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -136,30 +136,32 @@ const MainScreen = () => {
   );
 };
 
-const localStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  scrollContainer: {
     flexGrow: 1,
-    backgroundColor: "#000",
     justifyContent: "space-between",
     paddingVertical: 20,
   },
   topSection: {
     alignItems: "center",
-    marginTop: 40, // Pushes the title lower from the top
+    marginTop: 40,
   },
   middleSection: {
     alignItems: "center",
     flex: 1,
   },
   spacer: {
-    height: 70, // Adjust this value for a bigger space above and below the button
+    height: 70,
   },
   bottomSection: {
     alignItems: "center",
     paddingBottom: 20,
   },
   title: {
-    fontSize: 36, // Title size remains
+    fontSize: 36,
     fontWeight: "bold",
     textAlign: "center",
   },
@@ -202,7 +204,7 @@ const localStyles = StyleSheet.create({
     marginVertical: 10,
   },
   specialButton: {
-    backgroundColor: "#DA70D6",
+    backgroundColor: "#FA5F55",
   },
   buttonText: {
     fontSize: 16,
@@ -210,9 +212,9 @@ const localStyles = StyleSheet.create({
     color: "#000",
   },
   link: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
-    color: "#DA70D6",
+    color: "#FA5F55",
     marginVertical: 10,
     textDecorationLine: "none",
   },

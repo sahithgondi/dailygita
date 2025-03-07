@@ -1,75 +1,132 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import { useTheme } from "../theme";
-import { GestureHandlerRootView, PanGestureHandler } from "react-native-gesture-handler";
+import {
+  GestureHandlerRootView,
+  PanGestureHandler,
+  State,
+} from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
 const TranslationGuideScreen = () => {
-  const { styles } = useTheme();
+  const theme = useTheme(); // Get current theme
   const navigation = useNavigation();
 
   const handleSwipeBack = (event) => {
-    if (event.nativeEvent.translationX > 50) {
+    if (event.nativeEvent.state === State.END && event.nativeEvent.translationX > 50) {
       navigation.goBack();
     }
   };
 
   return (
-    <GestureHandlerRootView style={styles.background}>
-      <PanGestureHandler onGestureEvent={handleSwipeBack}>
-        <ScrollView style={styles.background}>
-          <View style={[styles.container, styles.card]}>
-            <Text style={styles.title}>Transliteration and Pronunciation Guide</Text>
-            <View style={styles.tableContainer}>
-              <View style={styles.rowHeader}>
-                <Text style={styles.cellHeader}>Letter(s)</Text>
-                <Text style={styles.cellHeader}>Pronounced as</Text>
-                <Text style={styles.cellHeader}>Letter(s)</Text>
-                <Text style={styles.cellHeader}>Pronounced as</Text>
-              </View>
-              {[ 
-                ["om", "Home or Rome", "ṭa", "Touch"],
-                ["a", "Fun", "ṭha", "Ant-hill"],
-                ["ā", "Car", "ḍa", "Duck"],
-                ["i", "Pin", "ḍha", "Godhood"],
-                ["ī", "Feet", "ṇa", "Thunder"],
-                ["u", "Put", "ta", "(Close to) Think"],
-                ["ū", "Pool", "tha", "(Close to) Pathetic"],
-                ["ṛ", "Rig", "da", "(Close to) Father"],
-                ["ṝ", "(Long r)", "dha", "(Close to) Breathe hard"],
-                ["e", "Play", "na", "Numb"],
-                ["ai", "High", "pa", "Purse"],
-                ["o", "Over", "pha", "Sapphire"],
-                ["au", "Cow", "ba", "But"],
-                ["aṁ/aṃ", "Nasalized", "bha", "Abhor"],
-                ["aḥ", "Aspirated vowel", "ma", "Mother"],
-                ["Ka", "Kind", "ya", "Young"],
-                ["Kha", "Blockhead", "ra", "Run"],
-                ["Ga", "Gate", "la", "Luck"],
-                ["Gha", "Log-hut", "va", "Virtue"],
-                ["Na", "Sing", "śa", "Shove"],
-                ["Ca", "Chunk", "ṣa", "Bushel"],
-                ["Cha", "Match", "sa", "Sir"],
-                ["Ja", "Jug", "ha", "House"],
-                ["Jha", "Hedgehog", "(Note 1)", "(Close to) World"],
-                ["Ṭra", "Three", "kṣa", "Worksheet"],
-                ["A (a)", "Unpronounced", "Aa (ā)", "Unpronounced"]
-              ].map((row, index) => (
-                <View key={index} style={styles.row}>
-                  {row.map((cell, cellIndex) => (
-                    <Text key={cellIndex} style={styles.cell}>{cell}</Text>
-                  ))}
+    <SafeAreaView style={[styles.container, theme.background]}>
+      <GestureHandlerRootView style={styles.flex}>
+        <PanGestureHandler onHandlerStateChange={handleSwipeBack}>
+          <ScrollView contentContainerStyle={styles.scrollContent} style={theme.background}>
+            <View style={[styles.card, theme.card]}>
+              <Text style={[styles.title, theme.text]}>Transliteration and Pronunciation Guide</Text>
+              <View style={styles.tableContainer}>
+                <View style={[styles.rowHeader, theme.card]}>
+                  <Text style={[styles.cellHeader, theme.text]}>Letter(s)</Text>
+                  <Text style={[styles.cellHeader, theme.text]}>Pronounced as</Text>
                 </View>
-              ))}
+                {[
+                  ["om", "Home or Rome"],
+                  ["a", "Fun"],
+                  ["ā", "Car"],
+                  ["i", "Pin"],
+                  ["ī", "Feet"],
+                  ["u", "Put"],
+                  ["ū", "Pool"],
+                  ["ṛ", "Rig"],
+                  ["ṝ", "(Long r)"],
+                  ["e", "Play"],
+                  ["ai", "High"],
+                  ["o", "Over"],
+                  ["au", "Cow"],
+                  ["aṁ/aṃ", "Nasalized"],
+                  ["aḥ", "Aspirated vowel"],
+                  ["Ka", "Kind"],
+                  ["Kha", "Blockhead"],
+                  ["Ga", "Gate"],
+                  ["Gha", "Log-hut"],
+                  ["Na", "Sing"],
+                  ["Ca", "Chunk"],
+                  ["Cha", "Match"],
+                  ["Ja", "Jug"],
+                  ["Jha", "Hedgehog"],
+                  ["Ṭra", "Three"],
+                  ["A (a)", "Unpronounced"],
+                  ["Aa (ā)", "Unpronounced"],
+                  ["ṭa", "Touch"],
+                  ["ṭha", "Ant-hill"],
+                  ["ḍa", "Duck"],
+                  ["ḍha", "Godhood"],
+                  ["ṇa", "Thunder"],
+                  ["ta", "(Close to) Think"],
+                  ["tha", "(Close to) Pathetic"],
+                  ["da", "(Close to) Father"],
+                  ["dha", "(Close to) Breathe hard"],
+                  ["na", "Numb"],
+                  ["pa", "Purse"],
+                  ["pha", "Sapphire"],
+                  ["ba", "But"],
+                  ["bha", "Abhor"],
+                  ["ma", "Mother"],
+                  ["ya", "Young"],
+                  ["ra", "Run"],
+                  ["la", "Luck"],
+                  ["va", "Virtue"],
+                  ["śa", "Shove"],
+                  ["ṣa", "Bushel"],
+                  ["sa", "Sir"],
+                  ["ha", "House"],
+                  ["(Note 1)", "(Close to) World"],
+                  ["kṣa", "Worksheet"],
+                  ["jña", "*"],
+                ].map((row, index) => (
+                  <View key={index} style={styles.row}>
+                    {row.map((cell, cellIndex) => (
+                      <Text key={cellIndex} style={[styles.cell, theme.text]}>{cell}</Text>
+                    ))}
+                  </View>
+                ))}
+              </View>
+              <Text style={[styles.notes, theme.text]}>Note 1: "ḹ" Itself is sometimes used.</Text>
+              <Text style={[styles.notes, theme.text]}>* No English Equivalent</Text>
+              <Text style={[styles.notes, theme.text]}>** Nasalization of the preceding vowel</Text>
+              <Text style={[styles.notes, theme.text]}>*** Aspiration of preceding vowel.</Text>
             </View>
-          </View>
-        </ScrollView>
-      </PanGestureHandler>
-    </GestureHandlerRootView>
+          </ScrollView>
+        </PanGestureHandler>
+      </GestureHandlerRootView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  flex: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingVertical: 20,
+    alignItems: "center",
+  },
+  card: {
+    borderRadius: 8,
+    padding: 16,
+    width: "90%",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginVertical: 10,
+  },
   tableContainer: {
     marginTop: 10,
     borderWidth: 1,
@@ -77,7 +134,6 @@ const styles = StyleSheet.create({
   },
   rowHeader: {
     flexDirection: "row",
-    backgroundColor: "#ddd",
     padding: 5,
   },
   row: {
@@ -93,8 +149,14 @@ const styles = StyleSheet.create({
   },
   cell: {
     flex: 1,
-    padding: 5,
+    fontSize: 18,
+    padding: 8,
     textAlign: "center",
+  },
+  notes: {
+    textAlign: "center",
+    fontSize: 16,
+    marginTop: 10,
   },
 });
 
