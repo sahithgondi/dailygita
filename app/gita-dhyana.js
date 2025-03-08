@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { GestureHandlerRootView, PanGestureHandler, State } from "react-native-gesture-handler";
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase("gita.db");
+const db = SQLite.openDatabaseAsync("gita.db");
 
 export default function GitaDhyana() {
   const navigation = useNavigation();
