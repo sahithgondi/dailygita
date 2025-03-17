@@ -1,3 +1,5 @@
+// 🛠 helpers.js (Clean version)
+
 let db;
 
 export const setDBInstance = (dbInstance) => {
@@ -7,10 +9,7 @@ export const setDBInstance = (dbInstance) => {
 export const getShlokasByChapter = async (chapterId) => {
   if (!db) return [];
   try {
-    return await db.getAllAsync(
-      "SELECT * FROM shlokas WHERE chapter_id = ?",
-      [chapterId]
-    );
+    return await db.getAllAsync("SELECT * FROM shlokas WHERE chapter_id = ?", [chapterId]);
   } catch (error) {
     console.log("❌ Error fetching shlokas:", error);
     return [];
@@ -18,7 +17,7 @@ export const getShlokasByChapter = async (chapterId) => {
 };
 
 export const getRandomShloka = async () => {
-  if (!db) return [];
+  if (!db) return null;
   try {
     const result = await db.getAllAsync(
       "SELECT * FROM shlokas WHERE noti_id IS NOT NULL ORDER BY RANDOM() LIMIT 1;"
@@ -39,7 +38,7 @@ export const toggleBookmark = async (id, currentStatus) => {
   }
 };
 
-export const addNote = async (id, note) => {
+export const addNote = async (id, note = "") => {
   if (!db) return;
   try {
     await db.runAsync("UPDATE shlokas SET note = ? WHERE id = ?", [note, id]);
