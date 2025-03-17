@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MainScreen from "./MainScreen";
 import TranslationGuideScreen from "../translation-guide";
-import GitaDhyana from "../gita-dhyana";
+import GitaDhyana from "./gita-dhyana";
 
 // 1) Import your ThemeProvider (adjust the path as needed).
 import { ThemeProvider } from "../../theme"; 

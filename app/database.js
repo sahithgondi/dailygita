@@ -1,5 +1,4 @@
 import * as SQLite from 'expo-sqlite';
-
 let db;
 
 const initializeDB = async () => {
@@ -378,7 +377,7 @@ export const getBookmarkedShlokas = async () => {
   }
 };
 
-// Initialize database when imported
+// ✅ Initialize database when imported
 setupDatabase();
 
 export default db;
