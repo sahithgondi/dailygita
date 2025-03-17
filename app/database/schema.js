@@ -1,16 +1,17 @@
-export const DB_VERSION = 1;
+export const DB_VERSION = 8;
 
 export const createShlokaTableSQL = `
   CREATE TABLE IF NOT EXISTS shlokas (
     chapter_id TEXT,
-    id INTEGER PRIMARY KEY,
+    id INTEGER,
     uvaca TEXT,
     shloka TEXT,
     uvaca_meaning TEXT,
     shloka_meaning TEXT,
     noti_id TEXT,
     starred BOOLEAN DEFAULT 0,
-    note TEXT DEFAULT ''
+    note TEXT DEFAULT '',
+    PRIMARY KEY (chapter_id, id)
   );
 `;
 
