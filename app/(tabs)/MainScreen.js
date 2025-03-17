@@ -15,32 +15,32 @@ import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 
 const chapters = [
-  { id: "B", title: "Gītā Dhyāna Ślokāḥ" },
-  { id: "1", title: "Arjuna Viṣāda Yogaḥ" },
-  { id: "2", title: "Sāṅkhya Yogaḥ" },
-  { id: "3", title: "Karma Yogaḥ" },
-  { id: "4", title: "Jñāna Yogaḥ" },
-  { id: "5", title: "Karma Sanyāsa Yogaḥ" },
-  { id: "6", title: "Ātma Saṁyama Yogaḥ" },
-  { id: "7", title: "Jñāna Vijñāna Yogaḥ" },
-  { id: "8", title: "Akṣara Parabrahma Yogaḥ" },
-  { id: "9", title: "Rājavidyā Rājaguhya Yogaḥ" },
-  { id: "10", title: "Vibhūti Yogaḥ" },
-  { id: "11", title: "Viśvarūpa Sandarśana Yogaḥ" },
-  { id: "12", title: "Bhakti Yogaḥ" },
-  { id: "13", title: "Kṣetrakṣetrajña Vibhāga Yogaḥ" },
-  { id: "14", title: "Guṇatraya Vibhāga Yogaḥ" },
-  { id: "15", title: "Puruṣottama Yogaḥ" },
-  { id: "16", title: "Daivāsura Sampadvibhāga Yogaḥ" },
-  { id: "17", title: "Śraddhātraya Vibhāga Yogaḥ" },
-  { id: "18", title: "Mokṣa Sanyāsa Yogaḥ" },
-  { id: "C", title: "Gītāsāram" },
-  { id: "D", title: "Phalaśruti" },
+  { id: "A", title: "Gītā Dhyāna Ślokāḥ", screen: "GitaDhyana" },
+  { id: "1", title: "Arjuna Viṣāda Yogaḥ", screen: "Chapter1" },
+  { id: "2", title: "Sāṅkhya Yogaḥ", screen: "Chapter2" },
+  { id: "3", title: "Karma Yogaḥ", screen: "Chapter3" },
+  { id: "4", title: "Jñāna Yogaḥ", screen: "Chapter4" },
+  { id: "5", title: "Karma Sanyāsa Yogaḥ", screen: "Chapter5" },
+  { id: "6", title: "Ātma Saṁyama Yogaḥ", screen: "Chapter6" },
+  { id: "7", title: "Jñāna Vijñāna Yogaḥ", screen: "Chapter7" },
+  { id: "8", title: "Akṣara Parabrahma Yogaḥ", screen: "Chapter8" },
+  { id: "9", title: "Rājavidyā Rājaguhya Yogaḥ", screen: "Chapter9" },
+  { id: "10", title: "Vibhūti Yogaḥ", screen: "Chapter10" },
+  { id: "11", title: "Viśvarūpa Sandarśana Yogaḥ", screen: "Chapter11" },
+  { id: "12", title: "Bhakti Yogaḥ", screen: "Chapter12" },
+  { id: "13", title: "Kṣetrakṣetrajña Vibhāga Yogaḥ", screen: "Chapter13" },
+  { id: "14", title: "Guṇatraya Vibhāga Yogaḥ", screen: "Chapter14" },
+  { id: "15", title: "Puruṣottama Yogaḥ", screen: "Chapter15" },
+  { id: "16", title: "Daivāsura Sampadvibhāga Yogaḥ", screen: "Chapter16" },
+  { id: "17", title: "Śraddhātraya Vibhāga Yogaḥ", screen: "Chapter17" },
+  { id: "18", title: "Mokṣa Sanyāsa Yogaḥ", screen: "Chapter18" },
+  { id: "C", title: "Gītāsāram", screen: "ChapterC" },
+  { id: "D", title: "Phalaśruti", screen: "ChapterD" },
 ];
 
 const MainScreen = () => {
   const navigation = useNavigation();
-  const themeStyles = useTheme(); // Apply dark or light mode
+  const themeStyles = useTheme();
   const [randomShloka, setRandomShloka] = useState(null);
 
   useEffect(() => {
@@ -84,12 +84,10 @@ const MainScreen = () => {
   return (
     <SafeAreaView style={[styles.container, themeStyles.background]}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Top Section */}
         <View style={styles.topSection}>
           <Text style={[styles.title, themeStyles.text]}>Daily Bhagavad Gita</Text>
         </View>
 
-        {/* Middle Section */}
         <View style={styles.middleSection}>
           <View style={styles.spacer} />
           {randomShloka && (
@@ -111,23 +109,20 @@ const MainScreen = () => {
           <View style={styles.spacer} />
         </View>
 
-        {/* Bottom Section */}
         <View style={styles.bottomSection}>
           <View style={styles.tableOfContents}>
             <Text style={[styles.sectionTitle, themeStyles.text]}>Table of Contents</Text>
             {chapters.map((chapter) => (
-            <TouchableOpacity
-              key={chapter.id}
-              onPress={() => navigation.navigate(chapter.id === "B" ? "GitaDhyana" : `chapter-${chapter.id}`)}
-            >
-              <Text style={[styles.chapter, themeStyles.text]}>{chapter.title}</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                key={chapter.id}
+                onPress={() => navigation.navigate(chapter.screen)}
+              >
+                <Text style={[styles.chapter, themeStyles.text]}>{chapter.title}</Text>
+              </TouchableOpacity>
             ))}
           </View>
-          {/* Hyperlink-style Transliteration Guide */}
-          <TouchableOpacity
-            onPress={() => navigation.navigate("translation-guide")}
-          >
+
+          <TouchableOpacity onPress={() => navigation.navigate("translation-guide")}>
             <Text style={styles.link}>Transliteration Guide</Text>
           </TouchableOpacity>
         </View>
@@ -137,53 +132,30 @@ const MainScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
   scrollContainer: {
     flexGrow: 1,
     justifyContent: "space-between",
     paddingVertical: 20,
   },
-  topSection: {
-    alignItems: "center",
-    marginTop: 40,
-  },
-  middleSection: {
-    alignItems: "center",
-    flex: 1,
-  },
-  spacer: {
-    height: 70,
-  },
-  bottomSection: {
-    alignItems: "center",
-    paddingBottom: 20,
-  },
+  topSection: { alignItems: "center", marginTop: 40 },
+  middleSection: { alignItems: "center", flex: 1 },
+  spacer: { height: 70 },
+  bottomSection: { alignItems: "center", paddingBottom: 20 },
   title: {
     fontSize: 36,
     fontWeight: "bold",
     textAlign: "center",
   },
-  shlokaContainer: {
-    marginVertical: 20,
-    paddingHorizontal: 16,
-  },
+  shlokaContainer: { marginVertical: 20, paddingHorizontal: 16 },
   verse: {
     fontSize: 16,
     fontWeight: "600",
     marginBottom: 8,
     textAlign: "center",
   },
-  translation: {
-    fontSize: 14,
-    fontStyle: "italic",
-    textAlign: "center",
-  },
-  tableOfContents: {
-    alignItems: "center",
-    marginVertical: 20,
-  },
+  translation: { fontSize: 14, fontStyle: "italic", textAlign: "center" },
+  tableOfContents: { alignItems: "center", marginVertical: 20 },
   sectionTitle: {
     fontSize: 30,
     fontWeight: "bold",
@@ -203,14 +175,8 @@ const styles = StyleSheet.create({
     width: 220,
     marginVertical: 10,
   },
-  specialButton: {
-    backgroundColor: "#FA5F55",
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#000",
-  },
+  specialButton: { backgroundColor: "#FA5F55" },
+  buttonText: { fontSize: 16, fontWeight: "bold", color: "#000" },
   link: {
     fontSize: 18,
     fontWeight: "bold",
