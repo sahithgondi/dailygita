@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, StyleSheet, Pressable, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Pressable,
+  SafeAreaView,
+} from "react-native";
 import { getShlokasByChapter } from "../database";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "../../theme";
@@ -13,14 +20,13 @@ export default function ChapterScreen({ chapterId = "1", title = "" }) {
   useEffect(() => {
     const fetchShlokas = async () => {
       const result = await getShlokasByChapter(String(chapterId));
-      console.log("Fetched Shlokas for Chapter:", chapterId, result);
-
-      result.forEach((shloka) => {
-        if (!refs.current[shloka.id]) {
-          refs.current[shloka.id] = React.createRef();
-        }
-      });
-      setShlokas(result);
+      const formatted = result.map((shloka) => ({
+        ...shloka,
+        shloka: shloka.shloka
+          ?.replace(/\|\|/g, "\u00A0||\u00A0")
+          .replace(/\|/g, "\u00A0|\u00A0"),
+      }));
+      setShlokas(formatted);
     };
     fetchShlokas();
   }, [chapterId]);
@@ -59,6 +65,13 @@ export default function ChapterScreen({ chapterId = "1", title = "" }) {
       color: theme.text.color,
       marginTop: 8,
     },
+    shlokaMeaning: {
+      fontSize: 16,
+      fontStyle: "italic",
+      textAlign: "center",
+      color: theme.text.color,
+      marginTop: 6,
+    },
   });
 
   const handleLongPress = (shloka) => {
@@ -76,12 +89,13 @@ export default function ChapterScreen({ chapterId = "1", title = "" }) {
             delayLongPress={150}
             style={styles.shlokaCard}
           >
-            <SharedElement id={`shloka-${shloka.id}`}>
-              <View>
-                <Text style={styles.shlokaNumber}>{shloka.id}</Text>
-                <Text style={styles.shlokaText}>{shloka.shloka}</Text>
-              </View>
-            </SharedElement>
+            <View>
+              <Text style={styles.shlokaNumber}>Shloka {shloka.id}</Text>
+              <Text style={styles.shlokaText}>{shloka.shloka}</Text>
+              {shloka.shloka_meaning ? (
+                <Text style={styles.shlokaMeaning}>{shloka.shloka_meaning}</Text>
+              ) : null}
+            </View>
           </Pressable>
         ))}
         <MainScreenButton />
