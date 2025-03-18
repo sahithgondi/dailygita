@@ -1,4 +1,4 @@
-export const DB_VERSION = 8;
+export const DB_VERSION = ;
 
 export const createShlokaTableSQL = `
   CREATE TABLE IF NOT EXISTS shlokas (
