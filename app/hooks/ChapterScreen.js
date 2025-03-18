@@ -12,7 +12,14 @@ export default function ChapterScreen({ chapterId = "1", title = "" }) {
 
   useEffect(() => {
     const fetchShlokas = async () => {
-      const result = await getShlokasByChapter(chapterId);
+      const result = await getShlokasByChapter(String(chapterId));
+      console.log("Fetched Shlokas for Chapter:", chapterId, result);
+
+      result.forEach((shloka) => {
+        if (!refs.current[shloka.id]) {
+          refs.current[shloka.id] = React.createRef();
+        }
+      });
       setShlokas(result);
     };
     fetchShlokas();

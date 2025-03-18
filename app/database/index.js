@@ -6,6 +6,7 @@ import { createShlokaTableSQL, DB_VERSION, getCurrentVersion, setVersion } from 
 import * as helpers from './helpers';
 
 let db;
+const RESET_DB_ON_START = __DEV__;
 
 export const initializeDB = async () => {
   if (!db) db = await SQLite.openDatabaseAsync("gita.db");
@@ -15,11 +16,6 @@ export const initializeDB = async () => {
 
 export const setupDatabase = async () => {
   await initializeDB();
-
-  console.log("🟡 setupDatabase(): Dropping old table to apply new schema...");
-  await db.execAsync("DROP TABLE IF EXISTS shlokas");
-
-  console.log("🟡 Creating table with new schema...");
   await db.execAsync(createShlokaTableSQL);
 
   console.log("⬇️ Reinserting all shlokas in transaction...");
@@ -45,4 +41,3 @@ export const setupDatabase = async () => {
 
 
 export { db };
-export * from './helpers';
