@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, StyleSheet, Pressable, SafeAreaView } from "react-native";
-import { SharedElement } from 'react-navigation-shared-element';
 import { getShlokasByChapter } from "../database";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "../../theme";
