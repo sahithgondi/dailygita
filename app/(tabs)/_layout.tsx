@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { setupDatabase } from "../database";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack"; 
+
 import MainScreen from "./MainScreen";
 import TranslationGuideScreen from "../translation-guide";
 import GitaDhyana from "./gita-dhyana.js";
@@ -24,7 +25,7 @@ import Chapter16 from "./chapter-16.js";
 import Chapter17 from "./chapter-17.js";
 import Chapter18 from "./chapter-18.js";
 
-import { ThemeProvider } from "../../theme"; 
+import { ThemeProvider } from "../../theme";
 
 const Stack = createStackNavigator();
 
