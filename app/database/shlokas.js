@@ -100,10 +100,8 @@ export const shlokas = [
   {
     chapter_id: "1",
     id: 1,
-    uvaca: "dhṛtarāṣṭra uvāca -",
-    shloka: "dharmakṣetre kurukṣetre\n samavetā yuyutsavaḥ |\n māmakāḥ pāṇḍavāścaiva\n kimakurvata sañjaya ||",
-    uvaca_meaning: "Dhritarashtra asked:",
-    shloka_meaning: "Sanjaya! On the sacred field of Kurukshetra, having gathered ready for battle, what have my son Duryodhana and the others, and the sons of Pandu, been doing?",
+    shloka: "dhṛtarāṣṭra uvāca -\n dharmakṣetre kurukṣetre\n samavetā yuyutsavaḥ |\n māmakāḥ pāṇḍavāścaiva\n kimakurvata sañjaya ||",
+    shloka_meaning: "Dhritarashtra asked:\n Sanjaya! On the sacred field of Kurukshetra, having gathered ready for battle, what have my son Duryodhana and the others, and the sons of Pandu, been doing?",
     noti_id: "1",
     starred: false,
     note: "",
@@ -111,10 +109,8 @@ export const shlokas = [
   {
     chapter_id: "1",
     id: 2,
-    uvaca: "sañjaya uvāca -",
-    shloka: "dṛṣṭvā tu pāṇḍavānīkaṁ\n vyūḍhaṁ duryodhanastadā |\n ācāryamupasaṅgamya\n rājā vacanamabravīt ||",
-    uvaca_meaning: "Sanjaya replied:",
-    shloka_meaning: "Duryodhana, the prince, viewing the Pandava army arrayed for battle, approached his teacher Drona, and spoke thus:",
+    shloka: "sañjaya uvāca -\n dṛṣṭvā tu pāṇḍavānīkaṁ\n vyūḍhaṁ duryodhanastadā |\n ācāryamupasaṅgamya\n rājā vacanamabravīt ||",
+    shloka_meaning: "Sanjaya replied:\n Duryodhana, the prince, viewing the Pandava army arrayed for battle, approached his teacher Drona, and spoke thus:",
     noti_id: "2",
     starred: false,
     note: "",
@@ -246,7 +242,42 @@ export const shlokas = [
   {
     chapter_id: "1",
     id: 17,
-    shloka: ""
+    shloka: "kāśyaśca parameṣvāsaḥ\n śikhaṇḍī ca mahārathaḥ |\n dhṛṣṭadyumno virāṭaśca\n sātyakiścāparājitaḥ ||",
+    noti_id: "15",
+    starred: false,
+    note: "",
+  },
+  {
+    chapter_id: "1",
+    id: 18,
+    shloka: "drupado draupadeyāśca\n sarvaśaḥ pṛthivīpate |\n soubhadraśca mahābāhuḥ\n śaṅkhāndadhmuḥ pṛthakpṛthak ||",
+    shloka_meaning: "The King of Kasi, the great bowman, the great chariot warrior Sikhandi, Dhrishtadyumna, Virata, the undefeatable Satyaki, Drupada, the sons of Draupadi, and the strong son of Subhadra also blew their respective conches, one after another from all directions.",
+    noti_id: "15",
+    starred: false,
+    note: "",
+  },
+  {
+    chapter_id: "1",
+    id: 19,
+    shloka: "sa ghoṣo dhārtarāṣṭrāṇāṁ\n hṛdayāni vyadārayat |\n nabhaśca pṛthivīṁ caiva\n tumulo vyanunādayan ||",
+    shloka_meaning: "The earth and the sky reverberated with the defeaning tumult. The dreadful din drained courage from the hearts of the sons of Dhritarashtra.",
+    noti_id: "16",
+    starred: false,
+    note: "",
+  },
+  {
+    chapter_id: "1",
+    id: 20,
+    shloka: "atha vyavasthitāndṛṣṭvā\n dhārtarāṣṭrānkapidhvajaḥ |\n pravṛtte śastrasampāte\n dhanurudyamya pāṇḍavaḥ ||",
+    noti_id: "17",
+    starred: false,
+    note: "",
+  },
+  {
+    chapter_id: "1",
+    id: 21,
+    shloka: "hṛṣīkeśaṁ tadā vākyam\n idamāha mahīpate |\n arjuna uvāca -\n senayorubhayormadhye rathaṁ sthāpaya me'cyuta ||",
+    
   }
 
 

@@ -24,10 +24,10 @@ export const setupDatabase = async () => {
   await db.execAsync("BEGIN TRANSACTION");
 
   try {
-    for (const { chapter_id, id, uvaca, shloka, uvaca_meaning, shloka_meaning, noti_id } of shlokas) {
+    for (const { chapter_id, id, shloka, shloka_meaning, noti_id } of shlokas) {
       await db.runAsync(
-        "INSERT INTO shlokas (chapter_id, id, uvaca, shloka, uvaca_meaning, shloka_meaning, noti_id, starred, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        [chapter_id, id, uvaca || null, shloka, uvaca_meaning || null, shloka_meaning || null, noti_id || null, 0, ""]
+        "INSERT INTO shlokas (chapter_id, id, shloka, shloka_meaning, noti_id, starred, note) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [chapter_id, id, shloka, shloka_meaning || null, noti_id || null, 0, ""]
       );
     }
     await db.execAsync("COMMIT");
