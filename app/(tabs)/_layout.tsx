@@ -3,6 +3,7 @@ import { setupDatabase } from "../database";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack"; 
 
+
 import MainScreen from "./MainScreen";
 import TranslationGuideScreen from "../translation-guide";
 import GitaDhyana from "./gita-dhyana.js";
