@@ -1,4 +1,4 @@
-export const DB_VERSION = 10;
+export const DB_VERSION = 12;
 
 export const createShlokaTableSQL = `
   CREATE TABLE IF NOT EXISTS shlokas (
@@ -15,6 +15,7 @@ export const createShlokaTableSQL = `
 
 export const getCurrentVersion = async (db) => {
   const result = await db.getAllAsync("PRAGMA user_version");
+  
   return result[0].user_version || 0;
 };
 

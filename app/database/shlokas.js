@@ -276,9 +276,236 @@ export const shlokas = [
   {
     chapter_id: "1",
     id: 21,
-    shloka: "hṛṣīkeśaṁ tadā vākyam\n idamāha mahīpate |\n arjuna uvāca -\n senayorubhayormadhye rathaṁ sthāpaya me'cyuta ||",
-    
+    shloka: "hṛṣīkeśaṁ tadā vākyam\nidam āha mahīpate |\n[[MEANING_HERE]]\narjuna uvāca —\nsenayor ubhayor madhye\nrathaṁ sthāpaya me 'cyuta ||",
+    shloka_meaning: "O King! Arjuna, whose flag bears the emblem of Hanuman, strung his bow. Looking at the sons of Dhritarashtra rearing their heads for battle, he said to Sri Krishna:",
+    noti_id: "18",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1", 
+    id: 22,
+    shloka: "yāvadetānnirīkṣe'haṁ\n yoddhukāmānavasthitān |\n kairmayā saha yoddhavyam\n asmin raṇasamudyame ||",
+    noti_id: "19",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 23,
+    shloka: "yotsyamānānavekṣe'haṁ\n ya ete'tra samāgatāḥ |\n dhārtarāṣṭrasyadurbuddheḥ\n yuddhe priyacikīrṣavaḥ ||",
+    shloka_meaning: "I am looking at all these warriors who have come here to fight. In this great battle, I know who is destined to fight against whom. I wish to see once all the valiant heroes who ahve assembled here to help the evil-minded Duryodhana. Sri Krishna, park my chariot in the middle of the two armies.",
+    noti_id: "19",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 24,
+    shloka: "sañjaya uvāca —\n evamukto hṛṣīkeśaḥ\n guḍākeśena bhārata |\n senayorubhayormadhye\n sthāpayitvā rathottamam ||",
+    noti_id: "20",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 25,
+    shloka: "bhīṣmadroṇapramukhataḥ\n sarveṣāṁ ca mahīkṣitām |\n uvāca pārtha paśyaitān\n samavetānkurūniti ||",
+    shloka_meaning: "Sanjaya said: Dhritarashtra! When Arjuna, the conqueror of sleep, spoke thus to Sri Krishna, Sri Krishna stopped his chariot between the two armies, facing the great Bhishma and Drona, and said,'Arjuna, look at the Kaurava warriors thirsting for battle.",
+    noti_id: "20",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 26,
+    shloka: "tatrāpaśyatsthitānpārthaḥ\n pitṝnatha pitāmahān |\n ācāryānmātulānbhrātṛn\n putrānpautrānsakhīṁstathā || śvaśurānsuhṛdaścaiva\n senayorubhayorapi |",
+    shloka_meaning: "Arjuna saw, assembled in both the armies, many respectable fatherly figures (like Bhoorisravas), grandfathers (like Bhishma), preceptors (like Drona), maternal uncles (like Salya), brothers, cousins (like Duryodhana), sons (like Lakshmana), friends (like Aswatthama), close pals (like Kritavarma), and grandchildren.",
+    noti_id: "21",
+    starred: 0,
+    note: "",
+  },
+  {
+    chapter_id: "1",
+    id: 27,
+    shloka: "tānsamīkṣya sa kaunteyaḥ\n sarvānbandhūnavasthitān |\n kṛpayā parayā''viṣṭaḥ\n viṣīdannidamabravīt ||",
+    shloka_meaning: "Seeing all the gathered relatives, heart-broken with sadness and pity,",
+    noti_id: "22",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 28,
+    shloka: "arjuna uvāca —\n dṛṣṭvemaṁ svajanaṁ kṛṣṇa\n yuyutsuṁ samupasthitam |\n sidanti mama gātrāṇi\n mukhaṁ ca pariśuṣyati ||",
+    noti_id: "23",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 29,
+    shloka: "vepathuśca śarīre me\n romaharṣaśca jāyate |\n gāṇḍīvam sraṁsate hastāt | tvakcaiva paridahyate ||",
+    shloka_meaning: "Arjuna said: Sri Krishna! I am losing control over my body seeing my near and dear relatives assembled here for war. My mouth dries up. My frame trembles. The Gandiva (bow) slips from my hand. My skin burns. My hair stands on end.",
+    noti_id: "23",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 30,
+    shloka: "na ca śaknomyavasthātuṁ\n brahmatīva ca me manah |\n nimittāni ca paśyāmi\n viparītāni keśava ||",
+    shloka_meaning: "My knees are buckling under me. My mind is frenzied. I see bad omens.",
+    noti_id: "24",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 31,
+    shloka: "na ca śreyo'nupaśyāmi\n hatvā svajanamāhave |\n na kāṅkṣe vijayaṁ kṛṣṇa\n na ca rājyaṁ sukhāni ca ||",
+    shloka_meaning: "Sri Krishna! I see absolutely no merit in killing so many relatives. I have no desire for victory in war, for the luxuries of a kingdom, or for any enjoyments.",
+    noti_id: "25",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 32,
+    shloka: "kiṁ no rājyena govinda\n kiṁ bhogairjīvitena vā ||",
+    noti_id: "26",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 33,
+    shloka: "yeṣāmarthe kāṅkṣitaṁ naḥ\n rājyaṁ bhogāssukhāni ca |\n ta ime'vasthitā yuddhe\n prāṇāṁstyaktvā dhanāni ca ||",
+    noti_id: "26",
+    starred: 0,
+  },
+  {
+    chapter_id: "1",
+    id: 34,
+    shloka: "ācāryāḥ pitaraḥ putrāḥ\n tathaiva ca pitāmahāḥ |\n mātulāśśvaśurāḥ pautrāḥ\n śyālāssambandhinastathā",
+    shloka_meaning: "O Govinda! Of what use is the gaining of a kingdom and its royal comforts, if it is only to lead a life without purpose? Those, for whose sake we wish to have the comforts of a kingdom, those same people, the gurus, fathers, sons, grandfathers, uncles, grandsons, brothers-in-law, and the other relatives, are now gathered here on this battleground, relinquising wealth, and even their very desire to live.",
+    noti_id: "26",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 35,
+    shloka: "etānna hantumicchāmi\n ghnato'pi madhusūdana |\n api trailokyarājyasya\n hetoḥ kiṁ nu mahīkṛte ||",
+    shloka_meaning: "I have no desire to kill them, Sri Krishna, even if they were to kill me. Not just for this kingdom, but for lordship of all three worlds, I would still not kill them.",
+    noti_id: "27",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 36,
+    shloka: "nihatya dhārtarāṣṭrānnaḥ\n ka prītissyājjanārdana |\n pāpam evāśrayedasmān\n hatvaitānātatāyinaḥ ||",
+    shloka_meaning: "What happiness would I derive by killing Duryodhana and the other relatives, Sri Krishna? Although they are rogues, we would only incur sin by killing them. (Rogues are defined as those who would set fire to homes, administer poison, take up weapons to kill, steal wealth, missapropriate land, and abduct wives. As per Dharma Sastra, killing such scoundrels is not wrong. Yet Arjuna believes otherwise.)",
+    noti_id: "28",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 37,
+    shloka: "tasmānnārha vayaṁ hantuṁ\n dhārtarāṣṭrānsvabāndhavān |\n svajanaṁ hi kathaṁ hatvā\n sukhinassyāma mādhava ||",
+    shloka_meaning: "Hence, it is not proper for me to kill Duryodhana and the other relatives. By killing them, how can we possibly find happiness?",
+    noti_id: "29",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1", 
+    id: 38,
+    shloka: "yadyapyete na paśyanti\n lobhopahatacetasaḥ\n kulakṣayakṛtaṁ doṣaṁ\n mitradrohe ca pātakam ||",
+    noti_id: "30",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 39,
+    shloka: "kathaṁ na jñeyamasmābhiḥ\n pāpādasmānnivartitum\n kulakṣayakṛtaṁ doṣaṁ\n prapaśyadbhirjanārdana ||",
+    shloka_meaning: "They have lost their discretion due to greed for the kingdom. They fail to recognize the sin of destroying family lineage and betraying friendship. I know the evil inherent in the destruction of the family lineage.",
+    noti_id: "30",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 40,
+    shloka: "kulakṣaye praṇaśyanti\n kuladharmāssanātanāḥ |\n dharme naṣṭe kulaṁ kṛtsnam\n adharmo'bhibhavatyuta ||", 
+    shloka_meaning: "When family is destroyed, ancient traditions are wiped out. When Dharma is ruined, customs crumble. Adharma becomes rampant.",
+    noti_id: "31",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 41,
+    shloka: "adharmābhibhavātkṛṣṇa\n praduṣyanti kulastriyaḥ |\n strīṣu duṣṭāsu vārṣṇeya\n jāyate varṇasaṅkaraḥ ||",
+    shloka_meaning: "Sri Krishna! When Adharma spreads, women lose their chastity. When women become unchaste, aristocracy is lost.",
+    noti_id: "32",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 42,
+    shloka: "saṅkaro narakāyaiva\n kulaghnānāṁ kulasya ca |\n patanti pitaro hyeṣāṁ\n luptapiṇḍodakakriyāḥ ||",
+    shloka_meaning: "When good breeding is lost, those responsible for it will go to hell. The forefathers, deprived of offerings by their progeny, will fall into degradation.",
+    noti_id: "33",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 43,
+    shloka: "doṣairetaiḥ kulaghnānāṁ\n varṇasaṅkarakārakaiḥ |\n utsādyante jātidharmāḥ\n kuladharmāśca śāśvatāḥ ||",
+    shloka_meaning: "Adulteration of family lineage roots out all hoary traditions, customs, and mores of society.",
+    noti_id: "34",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 44,
+    shloka: "utsannakuladharmāṇāṁ\n manuṣyāṇāṁ janārdana |\n narake'niyatam vāsaḥ\n bhavatītyanuśuśruma ||",
+    shloka_meaning: "We hear that those who break family traditions will certainly live in hell.",
+    noti_id: "35",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 45,
+    shloka: "aho bata mahatpāpaṁ\n kartuṁ vyavasitā vayam |\n yadrājyasukhalobhena\n hantuṁ svajanamudyatāḥ",
+    shloka_meaning: "Sri Krishna! We are on the brink of committing a horrendous sin. We will accumulate only sin, if we proceed to kill these relatives out of greed for the luxuries of a kingdom.",
+    noti_id: "36",
+    starred: 0,
+    note: ""
+  },
+  {
+    chapter_id: "1",
+    id: 46,
+    shloka: "yadi māmapratīkāram\n aśastram śastrapāṇayaḥ |\n dhārtarāṣṭrā raṇe hanyuḥ\n tanme kṣemataraṁ bhavet ||",
+    shloka_meaning: "If Duryodhana and the others kill me, while I am unarmed and choose not to defend myself, I would prefer such a death, to this fate.",
+    noti_id: "37",
+    starred: 0,
+    note: "",
+  },
+  {
+    chapter_id: "1",
+    id: 47,
+    shloka: ""
   }
+  
 
 
 

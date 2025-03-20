@@ -1,4 +1,4 @@
-// 📄 ChapterScreen.js (Enhanced Popup Version)
+// 📄 ChapterScreen.js (Enhanced Popup Version with [[MEANING_HERE]] support)
 import React, { useEffect, useRef, useState } from "react";
 import {
   View,
@@ -197,8 +197,20 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
                 style={styles.shlokaContainer}
               >
                 <Text style={styles.shlokaNumber}>{shloka.id}</Text>
-                <Text style={styles.shlokaText}>{shloka.shloka}</Text>
-                {shloka.shloka_meaning && <Text style={styles.meaningText}>{shloka.shloka_meaning}</Text>}
+                {shloka.shloka.includes("[[MEANING_HERE]]") ? (
+                  <>
+                    <Text style={styles.shlokaText}>{shloka.shloka.split("[[MEANING_HERE]]")[0]}</Text>
+                    <Text style={styles.meaningText}>{shloka.shloka_meaning}</Text>
+                    <Text style={styles.shlokaText}>{shloka.shloka.split("[[MEANING_HERE]]")[1]}</Text>
+                  </>
+                ) : (
+                  <>
+                    <Text style={styles.shlokaText}>{shloka.shloka}</Text>
+                    {shloka.shloka_meaning?.length > 0 && (
+                      <Text style={styles.meaningText}>{shloka.shloka_meaning}</Text>
+                    )}
+                  </>
+                )}
               </TouchableOpacity>
             ))}
             <MainScreenButton />
@@ -220,8 +232,18 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
                 ]}
               >
                 <View style={styles.popupCard}>
-                  <Text style={styles.popupShloka}>{selectedShloka.shloka}</Text>
-                  <Text style={styles.popupMeaning}>{selectedShloka.shloka_meaning}</Text>
+                  {selectedShloka.shloka.includes("[[MEANING_HERE]]") ? (
+                    <>
+                      <Text style={styles.popupShloka}>{selectedShloka.shloka.split("[[MEANING_HERE]]")[0]}</Text>
+                      <Text style={styles.popupMeaning}>{selectedShloka.shloka_meaning}</Text>
+                      <Text style={styles.popupShloka}>{selectedShloka.shloka.split("[[MEANING_HERE]]")[1]}</Text>
+                    </>
+                  ) : (
+                    <>
+                      <Text style={styles.popupShloka}>{selectedShloka.shloka}</Text>
+                      <Text style={styles.popupMeaning}>{selectedShloka.shloka_meaning}</Text>
+                    </>
+                  )}
                 </View>
 
                 <Animated.View style={[styles.menu, showMenuAbove ? { marginBottom: 10, marginTop: 0 } : {}, { transform: [{ scale: menuScaleAnim }] }]}>
