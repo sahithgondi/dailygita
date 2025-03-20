@@ -503,6 +503,15 @@ export const shlokas = [
   {
     chapter_id: "1",
     id: 47,
+    shloka: "sañjaya uvāca -\n evamuktvā'rjunassaṅkhye\n rathopastha upāviśat |\n visṛjya saśaraṁ cāpaṁ\n śokasaṁvignamānasaḥ ||",
+    shloka_meaning: "Sanjaya said: Arjuna, speaking thus, with a mind englufed in sorrow, dropped his bow and arrows, and slumped in the chariot.",
+    noti_id: "38",
+    starred: 0,
+    note: "",
+  },
+  {
+    chapter_id: "2",
+    id: 1,
     shloka: ""
   }
   
