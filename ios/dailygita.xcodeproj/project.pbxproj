@@ -408,7 +408,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sahithgondi.dailygita;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anonymous.dailygita;
 				PRODUCT_NAME = dailygita;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "dailygita/dailygita-Bridging-Header.h";

@@ -26,6 +26,7 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
         <data android:scheme="com.anonymous.dailygita"/>
+        <data android:scheme="exp+dailygita"/>
       </intent-filter>
     </activity>
   </application>
