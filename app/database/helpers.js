@@ -56,3 +56,26 @@ export const getBookmarkedShlokas = async () => {
     return [];
   }
 };
+
+export const toggleStarred = async (chapter_id, id) => {
+  if (!db) return;
+  try {
+    // First, get the current starred status
+    const result = await db.getAllAsync(
+      "SELECT starred FROM shlokas WHERE chapter_id = ? AND id = ?", 
+      [chapter_id, id]
+    );
+    
+    if (result.length > 0) {
+      const newStatus = result[0].starred ? 0 : 1;
+      await db.runAsync(
+        "UPDATE shlokas SET starred = ? WHERE chapter_id = ? AND id = ?", 
+        [newStatus, chapter_id, id]
+      );
+      return newStatus;
+    }
+  } catch (error) {
+    console.log("❌ Toggle starred error:", error);
+    throw error;
+  }
+};

@@ -11,7 +11,9 @@ import {
   Animated,
   PanResponder,
   Dimensions,
-  ActivityIndicator,
+  ActivityIndicator, 
+  Share,
+  Alert,
 } from "react-native";
 import { GestureHandlerRootView, PanGestureHandler } from "react-native-gesture-handler";
 import { BlurView } from "expo-blur";
@@ -20,6 +22,7 @@ import { setupDatabase, getShlokasByChapter, toggleBookmark, addNote } from "../
 import { useSwipeNavigation } from "../hooks/useSwipeNavigation";
 import MainScreenButton from "../hooks/MainScreenButton";
 import { useTheme } from "../../theme";
+import * as Clipboard from 'expo-clipboard';
 
 export default function ChapterScreen({ chapterId = "1", title = "", nextScreen = "" }) {
   const [shlokas, setShlokas] = useState([]);
@@ -102,6 +105,22 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
       addNote(selectedShloka.id);
       closePopup();
     });
+
+  const handleCopyShloka = () => {
+    Clipboard.setStringAsync(selectedShloka.shloka);
+    Alert.alert("Shloka copied to clipboard");
+  };
+
+  const handleCopyMeaning = () => {
+    Clipboard.setStringAsync(selectedShloka.shloka_meaning);
+    Alert.alert("Shloka meaning copied to clipboard");
+  };
+
+  const handleShareShloka = () => {
+    Share.share({
+      message: selectedShloka.shloka,
+    });
+  };
 
   const panResponder = useRef(
     PanResponder.create({
@@ -252,6 +271,15 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
                   </TouchableOpacity>
                   <TouchableOpacity onPress={handleAddNote} style={styles.menuItem}>
                     <Text style={styles.menuText}>📝 Add Note</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleCopyShloka} style={styles.menuItem}>
+                    <Text style={styles.menuText}>📋 Copy Shloka</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleCopyMeaning} style={styles.menuItem}>
+                    <Text style={styles.menuText}>📋 Copy Shloka Meaning</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleShareShloka} style={styles.menuItem}>
+                    <Text style={styles.menuText}>🔗 Share Shloka</Text>
                   </TouchableOpacity>
                 </Animated.View>
               </Animated.View>
