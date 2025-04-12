@@ -1,4 +1,4 @@
-export const DB_VERSION = 17;
+export const DB_VERSION = 1;
 
 // Table creation SQL without indices
 export const createShlokaTableSQL = `

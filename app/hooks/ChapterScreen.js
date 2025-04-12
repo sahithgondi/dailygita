@@ -105,19 +105,23 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
       addNote(selectedShloka.id);
       closePopup();
     });
+
   const handleCopyShloka = () => {
     Clipboard.setStringAsync(selectedShloka.shloka);
     Alert.alert("Shloka copied to clipboard");
   };
 
+  const handleCopyMeaning = () => {
     Clipboard.setStringAsync(selectedShloka.shloka_meaning);
     Alert.alert("Shloka meaning copied to clipboard");
   };
+
   const handleShareShloka = () => {
     Share.share({
       message: selectedShloka.shloka,
     });
   };
+
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: (_, gestureState) => gestureState.dy > 10,
@@ -271,7 +275,7 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
                   <TouchableOpacity onPress={handleCopyShloka} style={styles.menuItem}>
                     <Text style={styles.menuText}>📋 Copy Shloka</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={handleCopyShlokaMeaning} style={styles.menuItem}>
+                  <TouchableOpacity onPress={handleCopyMeaning} style={styles.menuItem}>
                     <Text style={styles.menuText}>📋 Copy Shloka Meaning</Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={handleShareShloka} style={styles.menuItem}>
