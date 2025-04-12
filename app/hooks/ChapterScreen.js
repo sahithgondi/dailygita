@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   View,
-  Text,
+  Text, 
   ScrollView,
   StyleSheet,
   SafeAreaView,
@@ -14,6 +14,7 @@ import {
   ActivityIndicator, 
   Share,
   Alert,
+  Easing,
 } from "react-native";
 import { GestureHandlerRootView, PanGestureHandler } from "react-native-gesture-handler";
 import { BlurView } from "expo-blur";
@@ -34,9 +35,8 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
   const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
   const [showMenuAbove, setShowMenuAbove] = useState(false);
   const [popupHeight, setPopupHeight] = useState(0);
+  const [finalPosition, setFinalPosition] = useState({ top: 0, left: 0 });
   const insets = useSafeAreaInsets();
- 
-
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.85)).current;
@@ -47,6 +47,29 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
   const windowHeight = Dimensions.get("window").height;
   const theme = useTheme();
   const handleSwipe = useSwipeNavigation("goBack", nextScreen);
+
+  const safeMargin = 12;
+  const screenTop = safeMargin + insets.top;
+  const screenBottom = windowHeight - safeMargin - insets.bottom;
+
+  const calculatePosition = (height) => {
+    if (!selectedShloka) return;
+    
+    const desiredTop = popupPosition.y - height / 2;
+    const desiredLeft = Math.max(popupPosition.x - 160, safeMargin); 
+    
+    // Clamp the vertical position to keep within screen bounds
+    const clampedY = Math.min(
+      Math.max(desiredTop, screenTop),
+      screenBottom - height
+    );
+
+    // Store the final position to prevent layout shifts
+    setFinalPosition({
+      top: clampedY,
+      left: desiredLeft
+    });
+  };
 
   useEffect(() => {
     const init = async () => {
@@ -68,28 +91,101 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
     fetchShlokas();
   }, [chapterId, dbReady]);
 
+  // More subtle, slower animations with completion callback
+  const animatePopupAppearance = () => {
+    // Make sure to reset any in-progress animations
+    translateYAnim.stopAnimation();
+    scaleAnim.stopAnimation();
+    fadeAnim.stopAnimation();
+    
+    // Reset all animations - Start with smaller initial values for subtlety
+    translateYAnim.setValue(8);    // Reduced starting position
+    scaleAnim.setValue(0.96);      // Start closer to final scale
+    fadeAnim.setValue(0);
+    
+    Animated.parallel([
+      // Quick fade in
+      Animated.timing(fadeAnim, { 
+        toValue: 1, 
+        duration: 180,
+        useNativeDriver: true,
+        easing: Easing.out(Easing.quad)
+      }),
+      
+      // More controlled position animation
+      Animated.spring(translateYAnim, { 
+        toValue: -20,
+        useNativeDriver: true,
+        tension: 120,
+        friction: 15,
+        velocity: -0.5
+      }),
+      
+      // Very subtle scale animation
+      Animated.spring(scaleAnim, { 
+        toValue: 1, 
+        useNativeDriver: true, 
+        tension: 110,
+        friction: 14,
+        velocity: 1
+      })
+    ]).start(() => {
+      // Explicitly set final values to ensure stability
+      translateYAnim.setValue(-20);
+      scaleAnim.setValue(1);
+      fadeAnim.setValue(1);
+    });
+  };
+
   const handleLongPress = (shloka, ref) => {
     if (!ref?.current) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     ref.current.measureInWindow((x, y, width, height) => {
       setPopupPosition({ x: x + width / 2, y: y + height / 2 });
-      setShowMenuAbove(y > windowHeight * 0.6);
+      const estimatedCardHeight = 200;
+      const estimatedMenuHeight = 180;
+
+      const spaceBelow = windowHeight - y;
+      const spaceAbove = y;
+
+      setShowMenuAbove(spaceBelow < estimatedMenuHeight + 40); // show above if not enough space
+
+      // Set the selected shloka first, before any animations
       setSelectedShloka(shloka);
-      translateYAnim.setValue(0);
-      Animated.parallel([
-        Animated.timing(fadeAnim, { toValue: 1, duration: 200, useNativeDriver: true }),
-        Animated.spring(scaleAnim, { toValue: 1, useNativeDriver: true, friction: 7 }),
-        Animated.timing(translateYAnim, { toValue: -30, duration: 300, useNativeDriver: true }),
-      ]).start();
+      
+      // Use a slight delay to let layout calculations complete
+      setTimeout(() => {
+        animatePopupAppearance();
+      }, 10);
     });
   };
 
   const closePopup = () => {
+    // Simple fade out animation
     Animated.parallel([
-      Animated.timing(fadeAnim, { toValue: 0, duration: 200, useNativeDriver: true }),
-      Animated.timing(scaleAnim, { toValue: 0.85, duration: 200, useNativeDriver: true }),
-      Animated.timing(translateYAnim, { toValue: 0, duration: 200, useNativeDriver: true }),
-    ]).start(() => setSelectedShloka(null));
+      Animated.timing(fadeAnim, { 
+        toValue: 0, 
+        duration: 140, 
+        useNativeDriver: true,
+        easing: Easing.out(Easing.quad)
+      }),
+      Animated.timing(scaleAnim, { 
+        toValue: 0.94, 
+        duration: 140, 
+        useNativeDriver: true,
+        easing: Easing.out(Easing.quad)
+      }),
+      Animated.timing(translateYAnim, { 
+        toValue: 0, 
+        duration: 140, 
+        useNativeDriver: true,
+        easing: Easing.out(Easing.quad)
+      })
+    ]).start(() => {
+      setSelectedShloka(null);
+      // Reset animations for next time
+      translateYAnim.setValue(0);
+    });
   };
 
   const animateMenuPress = (callback) => {
@@ -129,21 +225,6 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
     });
   };
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (_, gestureState) => gestureState.dy > 10,
-      onPanResponderMove: (_, gestureState) => {
-        if (gestureState.dy > 0) {
-          translateYAnim.setValue(-30 + gestureState.dy);
-        }
-      },
-      onPanResponderRelease: (_, gestureState) => {
-        if (gestureState.dy > 60) closePopup();
-        else Animated.timing(translateYAnim, { toValue: -30, duration: 150, useNativeDriver: true }).start();
-      },
-    })
-  ).current;
-
   const styles = StyleSheet.create({
     container: { padding: 20, paddingBottom: 80, ...theme.background },
     title: { fontSize: 28, fontWeight: "700", ...theme.text, marginBottom: 24, textAlign: "center", letterSpacing: 1 },
@@ -170,33 +251,43 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
       position: "absolute",
       width: 320,
       zIndex: 10,
-      borderRadius: 28,
+      borderRadius: 16,
       alignItems: "center",
       shadowColor: "#000",
-      shadowOpacity: 0.35,
-      shadowOffset: { width: 0, height: 8 },
-      shadowRadius: 20,
+      shadowOpacity: 0.25,
+      shadowOffset: { width: 0, height: 6 },
+      shadowRadius: 16,
       elevation: 10,
+      backfaceVisibility: 'hidden',
+      willChange: 'transform',
     },
     popupCard: {
       backgroundColor: theme.card.backgroundColor,
       padding: 20,
-      borderRadius: 24,
+      borderRadius: 14,
       alignItems: "center",
       maxWidth: "100%",
     },
     popupShloka: { fontSize: 22, fontWeight: "700", color: theme.text.color, textAlign: "center", marginBottom: 12 },
     popupMeaning: { fontSize: 18, color: theme.text.color, textAlign: "center", lineHeight: 26 },
     menu: {
-      marginTop: 12,
+      marginTop: 8,
       backgroundColor: theme.card.backgroundColor,
-      borderRadius: 16,
-      paddingVertical: 10,
+      borderTopWidth: 1,
+      borderTopColor: 'rgba(60,60,60,0.1)',
+      borderRadius: 14,
+      paddingTop: 6,
+      paddingBottom: 8,
       width: "100%",
-      alignItems: "center",
     },
-    menuItem: { paddingVertical: 12, width: "100%", alignItems: "center" },
-    menuText: { fontSize: 18, color: theme.text.color },
+    menuItem: { 
+      paddingVertical: 10,
+      width: "100%", 
+      alignItems: "center",
+      borderBottomWidth: 1,
+      borderBottomColor: 'rgba(60,60,60,0.05)',
+    },
+    menuText: { fontSize: 17, fontWeight: "500", color: theme.text.color },
   });
 
   if (!dbReady) {
@@ -207,18 +298,6 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
       </SafeAreaView>
     );
   }
-  const safeMargin = 12;
-  const screenTop = safeMargin;
-  const screenBottom = windowHeight - safeMargin;
-
-  const desiredTop = popupPosition.y - popupHeight / 2;
-
-  const clampedY = Math.min(
-    Math.max(desiredTop, screenTop),
-    screenBottom - popupHeight
-  );
-
-  const clampedX = Math.max(popupPosition.x - 160, safeMargin); // 160 = half popup width
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -258,18 +337,22 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
             <Pressable style={styles.overlay} onPress={closePopup}>
               <BlurView intensity={30} style={styles.blur} />
               <Animated.View
-                {...panResponder.panHandlers}
                 onLayout={(event) => {
                   const { height } = event.nativeEvent.layout;
                   setPopupHeight(height);
+                  calculatePosition(height);
                 }}
                 style={[
                   styles.popupWrapper,
                   {
-                    top: clampedY,
-                    left: clampedX,
+                    position: 'absolute',
+                    top: finalPosition.top,
+                    left: finalPosition.left,
                     opacity: fadeAnim,
-                    transform: [{ scale: scaleAnim }, { translateY: translateYAnim }],
+                    transform: [
+                      { scale: scaleAnim }, 
+                      { translateY: translateYAnim },
+                    ],
                   },
                 ]}
               >
@@ -283,12 +366,14 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
                   ) : (
                     <>
                       <Text style={styles.popupShloka}>{selectedShloka.shloka}</Text>
-                      <Text style={styles.popupMeaning}>{selectedShloka.shloka_meaning}</Text>
+                      {selectedShloka.shloka_meaning && selectedShloka.shloka_meaning.length > 0 && (
+                        <Text style={styles.popupMeaning}>{selectedShloka.shloka_meaning}</Text>
+                      )}
                     </>
                   )}
                 </View>
- 
-                <View style={{ height: 12 }} ></View>
+                
+                
 
                 <Animated.View style={[styles.menu, showMenuAbove ? { marginBottom: 10, marginTop: 0 } : {}, { transform: [{ scale: menuScaleAnim }] }]}>
                   <TouchableOpacity onPress={handleToggleStar} style={styles.menuItem}>
@@ -303,7 +388,7 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
                   <TouchableOpacity onPress={handleCopyMeaning} style={styles.menuItem}>
                     <Text style={styles.menuText}>📋 Copy Shloka Meaning</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={handleShareShloka} style={styles.menuItem}>
+                  <TouchableOpacity onPress={handleShareShloka} style={[styles.menuItem, { borderBottomWidth: 0 }]}>
                     <Text style={styles.menuText}>🔗 Share Shloka</Text>
                   </TouchableOpacity>
                 </Animated.View>
