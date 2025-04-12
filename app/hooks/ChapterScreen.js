@@ -23,6 +23,9 @@ import { useSwipeNavigation } from "../hooks/useSwipeNavigation";
 import MainScreenButton from "../hooks/MainScreenButton";
 import { useTheme } from "../../theme";
 import * as Clipboard from 'expo-clipboard';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+
 
 export default function ChapterScreen({ chapterId = "1", title = "", nextScreen = "" }) {
   const [shlokas, setShlokas] = useState([]);
@@ -30,6 +33,10 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
   const [selectedShloka, setSelectedShloka] = useState(null);
   const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
   const [showMenuAbove, setShowMenuAbove] = useState(false);
+  const [popupHeight, setPopupHeight] = useState(0);
+  const insets = useSafeAreaInsets();
+ 
+
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.85)).current;
@@ -200,6 +207,18 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
       </SafeAreaView>
     );
   }
+  const safeMargin = 12;
+  const screenTop = safeMargin;
+  const screenBottom = windowHeight - safeMargin;
+
+  const desiredTop = popupPosition.y - popupHeight / 2;
+
+  const clampedY = Math.min(
+    Math.max(desiredTop, screenTop),
+    screenBottom - popupHeight
+  );
+
+  const clampedX = Math.max(popupPosition.x - 160, safeMargin); // 160 = half popup width
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -240,11 +259,15 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
               <BlurView intensity={30} style={styles.blur} />
               <Animated.View
                 {...panResponder.panHandlers}
+                onLayout={(event) => {
+                  const { height } = event.nativeEvent.layout;
+                  setPopupHeight(height);
+                }}
                 style={[
                   styles.popupWrapper,
                   {
-                    top: popupPosition.y - 160,
-                    left: popupPosition.x - 160,
+                    top: clampedY,
+                    left: clampedX,
                     opacity: fadeAnim,
                     transform: [{ scale: scaleAnim }, { translateY: translateYAnim }],
                   },
@@ -264,6 +287,8 @@ export default function ChapterScreen({ chapterId = "1", title = "", nextScreen 
                     </>
                   )}
                 </View>
+ 
+                <View style={{ height: 12 }} ></View>
 
                 <Animated.View style={[styles.menu, showMenuAbove ? { marginBottom: 10, marginTop: 0 } : {}, { transform: [{ scale: menuScaleAnim }] }]}>
                   <TouchableOpacity onPress={handleToggleStar} style={styles.menuItem}>
